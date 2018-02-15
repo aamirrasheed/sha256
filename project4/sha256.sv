@@ -13,32 +13,73 @@ module sha256(input logic clk, reset_n, start,
 		end
 	endfunction
 	
-	enum logic [2:0] {IDLE=3'b000 STEP1=3'b001, STEP2=3'b010, STEP3=3'b011, STEP4=3'b100} state;
+	enum logic [3:0] {IDLE=4'b0000, STEP1_1=4'b0001, STEP1_2=4'b0010, STEP1_3=4'b0011, STEP1_4=4'b0100, STEP2_1=4'b1000} state;
 	
 	assign mem_clk = clk;
 	
-	logic [31:0] message [15:0];
+	logic [31:0] message [0:15];
+	
+	logic [15:0] count;
 	
 	always_ff @(posedge clk, negedge reset_n)
 	begin
-		if(reset_n) begin
+		if(!reset_n) begin
 			done <= 0;
 			state <= IDLE;
 		end else begin
 			case(state)
 				
 				IDLE: begin
+					$display("idle state\n");
+
 					if(start) begin
-						state <= STEP1;
+						state <= STEP1_1;
+						count <= 0;
 					end
 				end
 				
-				STEP1: begin
-					// instantiate memory reading module and read from memory???
+				STEP1_1: begin
+					$display("step 1_1\n");
+
+					mem_we <= 0;
+					mem_addr <= message_addr + count;
+					state <= STEP1_2;
+				end
+				
+				STEP1_2: begin
+					$display("Step 1_2\n");
+
+					state <= STEP1_3;
+				end
+				
+				STEP1_3: begin
+					//$display("Step 1_3\n");
+
+					message[count] <= mem_read_data;
+					count <= count + 1;
+					state <= STEP1_4;
+				end
+				
+				STEP1_4: begin
+					$display("Step1_4\n");
+
+					if(count == (size >> 2)) begin
+						state <= STEP2_1;
+					end
+					else begin
+						state <= STEP1_1;
+					end
+				end
+				
+				STEP2_1: begin
+					for(int i = 0; i < 64; i = i + 1) begin
+						$display("Message address: %d", i);
+						$display(" Message value %x\n", message[i]);
+					end
+					state <= IDLE;
 				end
 				
 			endcase
-		end
-		
+		end	
 	end
 endmodule

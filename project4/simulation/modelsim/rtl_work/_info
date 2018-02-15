@@ -1,0 +1,58 @@
+m255
+K4
+z2
+13
+!s112 1.1
+!i10d 8192
+!i10e 25
+!i10f 100
+cModel Technology
+Z0 dC:/intelFPGA_lite/17.1/project4/simulation/modelsim
+vsha256
+Z1 DXx6 sv_std 3 std 0 22 AD7iAPLo6nTIKk<N0eo=D3
+Z2 !s110 1518661886
+!i10b 1
+!s100 c@1<U@NXnKOP>XHWU2Y=k0
+IG]aBHb:IRXFTe^V1m311W1
+Z3 VDg1SIo80bB@j0V0VzS_@n1
+!s105 sha256_sv_unit
+S1
+R0
+w1518661790
+8C:/intelFPGA_lite/17.1/project4/sha256.sv
+FC:/intelFPGA_lite/17.1/project4/sha256.sv
+L0 1
+Z4 OV;L;10.5b;63
+r1
+!s85 0
+31
+Z5 !s108 1518661886.000000
+!s107 C:/intelFPGA_lite/17.1/project4/sha256.sv|
+!s90 -reportprogress|300|-work|work|C:/intelFPGA_lite/17.1/project4/sha256.sv|
+!i113 1
+Z6 o-work work
+Z7 tCvgOpt 0
+vtb_sha256
+R1
+R2
+!i10b 1
+!s100 Eb8NeMDKV?ETIaDBS^WUU3
+IljgD8@X2`aKQ9>aPA7Db[3
+R3
+!s105 tb_sha256_sv_unit
+S1
+R0
+w1518157333
+8C:/intelFPGA_lite/17.1/project4/tb_sha256.sv
+FC:/intelFPGA_lite/17.1/project4/tb_sha256.sv
+L0 1
+R4
+r1
+!s85 0
+31
+R5
+!s107 C:/intelFPGA_lite/17.1/project4/tb_sha256.sv|
+!s90 -reportprogress|300|-work|work|C:/intelFPGA_lite/17.1/project4/tb_sha256.sv|
+!i113 1
+R6
+R7
