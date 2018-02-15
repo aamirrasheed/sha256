@@ -1,9 +1,12 @@
 
 State Machine - |sha256|state
-Name state.STEP1_3 state.STEP1_2 state.STEP1_1 state.IDLE state.STEP2_1 state.STEP1_4 
-state.IDLE 0 0 0 0 0 0 
-state.STEP1_1 0 0 1 1 0 0 
-state.STEP1_2 0 1 0 1 0 0 
-state.STEP1_3 1 0 0 1 0 0 
-state.STEP1_4 0 0 0 1 0 1 
-state.STEP2_1 0 0 0 1 1 0 
+Name state.PAD state.READ_4 state.READ_3 state.READ_2 state.READ_1 state.ROUND_INIT state.INIT state.IDLE state.INIT_W 
+state.IDLE 0 0 0 0 0 0 0 0 0 
+state.INIT 0 0 0 0 0 0 1 1 0 
+state.ROUND_INIT 0 0 0 0 0 1 0 1 0 
+state.READ_1 0 0 0 0 1 0 0 1 0 
+state.READ_2 0 0 0 1 0 0 0 1 0 
+state.READ_3 0 0 1 0 0 0 0 1 0 
+state.READ_4 0 1 0 0 0 0 0 1 0 
+state.PAD 1 0 0 0 0 0 0 1 0 
+state.INIT_W 0 0 0 0 0 0 0 1 1 

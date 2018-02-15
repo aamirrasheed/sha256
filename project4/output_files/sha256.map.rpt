@@ -1,5 +1,5 @@
 Analysis & Synthesis report for sha256
-Wed Feb 14 18:30:15 2018
+Wed Feb 14 23:24:39 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -15,11 +15,13 @@ Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
   7. Analysis & Synthesis Resource Utilization by Entity
   8. State Machine - |sha256|state
   9. Registers Removed During Synthesis
- 10. General Register Statistics
- 11. Multiplexer Restructuring Statistics (Restructuring Performed)
- 12. Post-Synthesis Netlist Statistics for Top Partition
- 13. Elapsed Time Per Partition
- 14. Analysis & Synthesis Messages
+ 10. Removed Registers Triggering Further Register Optimizations
+ 11. General Register Statistics
+ 12. Parameter Settings for User Entity Instance: Top-level Entity: |sha256
+ 13. Post-Synthesis Netlist Statistics for Top Partition
+ 14. Elapsed Time Per Partition
+ 15. Analysis & Synthesis Messages
+ 16. Analysis & Synthesis Suppressed Messages
 
 
 
@@ -45,16 +47,16 @@ refer to the applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Analysis & Synthesis Summary                                                    ;
 +-----------------------------------+---------------------------------------------+
-; Analysis & Synthesis Status       ; Successful - Wed Feb 14 18:30:15 2018       ;
+; Analysis & Synthesis Status       ; Successful - Wed Feb 14 23:24:39 2018       ;
 ; Quartus Prime Version             ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                     ; sha256                                      ;
 ; Top-level Entity Name             ; sha256                                      ;
 ; Family                            ; Arria II GX                                 ;
 ; Logic utilization                 ; N/A                                         ;
-;     Combinational ALUTs           ; 46                                          ;
+;     Combinational ALUTs           ; 64                                          ;
 ;     Memory ALUTs                  ; 0                                           ;
-;     Dedicated logic registers     ; 38                                          ;
-; Total registers                   ; 38                                          ;
+;     Dedicated logic registers     ; 46                                          ;
+; Total registers                   ; 46                                          ;
 ; Total pins                        ; 182                                         ;
 ; Total virtual pins                ; 0                                           ;
 ; Total block memory bits           ; 0                                           ;
@@ -186,34 +188,34 @@ refer to the applicable agreement for further details.
 +-----------------------------------------------+-----------+
 ; Resource                                      ; Usage     ;
 +-----------------------------------------------+-----------+
-; Estimated ALUTs Used                          ; 46        ;
-;     -- Combinational ALUTs                    ; 46        ;
+; Estimated ALUTs Used                          ; 64        ;
+;     -- Combinational ALUTs                    ; 64        ;
 ;     -- Memory ALUTs                           ; 0         ;
 ;     -- LUT_REGs                               ; 0         ;
-; Dedicated logic registers                     ; 38        ;
+; Dedicated logic registers                     ; 46        ;
 ;                                               ;           ;
-; Estimated ALUTs Unavailable                   ; 6         ;
-;     -- Due to unpartnered combinational logic ; 6         ;
+; Estimated ALUTs Unavailable                   ; 0         ;
+;     -- Due to unpartnered combinational logic ; 0         ;
 ;     -- Due to Memory ALUTs                    ; 0         ;
 ;                                               ;           ;
-; Total combinational functions                 ; 46        ;
+; Total combinational functions                 ; 64        ;
 ; Combinational ALUT usage by number of inputs  ;           ;
 ;     -- 7 input functions                      ; 0         ;
-;     -- 6 input functions                      ; 8         ;
-;     -- 5 input functions                      ; 2         ;
+;     -- 6 input functions                      ; 1         ;
+;     -- 5 input functions                      ; 0         ;
 ;     -- 4 input functions                      ; 2         ;
-;     -- <=3 input functions                    ; 34        ;
+;     -- <=3 input functions                    ; 61        ;
 ;                                               ;           ;
 ; Combinational ALUTs by mode                   ;           ;
-;     -- normal mode                            ; 14        ;
+;     -- normal mode                            ; 27        ;
 ;     -- extended LUT mode                      ; 0         ;
-;     -- arithmetic mode                        ; 32        ;
+;     -- arithmetic mode                        ; 37        ;
 ;     -- shared arithmetic mode                 ; 0         ;
 ;                                               ;           ;
-; Estimated ALUT/register pairs used            ; 55        ;
+; Estimated ALUT/register pairs used            ; 67        ;
 ;                                               ;           ;
-; Total registers                               ; 38        ;
-;     -- Dedicated logic registers              ; 38        ;
+; Total registers                               ; 46        ;
+;     -- Dedicated logic registers              ; 46        ;
 ;     -- I/O registers                          ; 0         ;
 ;     -- LUT_REGs                               ; 0         ;
 ;                                               ;           ;
@@ -223,9 +225,9 @@ refer to the applicable agreement for further details.
 ; DSP block 18-bit elements                     ; 0         ;
 ;                                               ;           ;
 ; Maximum fan-out node                          ; clk~input ;
-; Maximum fan-out                               ; 39        ;
-; Total fan-out                                 ; 478       ;
-; Average fan-out                               ; 1.07      ;
+; Maximum fan-out                               ; 47        ;
+; Total fan-out                                 ; 529       ;
+; Average fan-out                               ; 1.12      ;
 +-----------------------------------------------+-----------+
 
 
@@ -234,36 +236,80 @@ refer to the applicable agreement for further details.
 +----------------------------+---------------------+---------------------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 ; Compilation Hierarchy Node ; Combinational ALUTs ; Dedicated Logic Registers ; Block Memory Bits ; DSP Elements ; DSP 9x9 ; DSP 12x12 ; DSP 18x18 ; DSP 36x36 ; Pins ; Virtual Pins ; Full Hierarchy Name ; Entity Name ; Library Name ;
 +----------------------------+---------------------+---------------------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
-; |sha256                    ; 46 (46)             ; 38 (38)                   ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 182  ; 0            ; |sha256             ; sha256      ; work         ;
+; |sha256                    ; 64 (64)             ; 46 (46)                   ; 0                 ; 0            ; 0       ; 0         ; 0         ; 0         ; 182  ; 0            ; |sha256             ; sha256      ; work         ;
 +----------------------------+---------------------+---------------------------+-------------------+--------------+---------+-----------+-----------+-----------+------+--------------+---------------------+-------------+--------------+
 Note: For table entries with two numbers listed, the numbers in parentheses indicate the number of resources of the given type used by the specific entity alone. The numbers listed outside of parentheses indicate the total resources of the given type used by the specific entity and all of its sub-entities in the hierarchy.
 
 
 Encoding Type:  One-Hot
-+------------------------------------------------------------------------------------------------------------+
-; State Machine - |sha256|state                                                                              ;
-+---------------+---------------+---------------+---------------+------------+---------------+---------------+
-; Name          ; state.STEP1_3 ; state.STEP1_2 ; state.STEP1_1 ; state.IDLE ; state.STEP2_1 ; state.STEP1_4 ;
-+---------------+---------------+---------------+---------------+------------+---------------+---------------+
-; state.IDLE    ; 0             ; 0             ; 0             ; 0          ; 0             ; 0             ;
-; state.STEP1_1 ; 0             ; 0             ; 1             ; 1          ; 0             ; 0             ;
-; state.STEP1_2 ; 0             ; 1             ; 0             ; 1          ; 0             ; 0             ;
-; state.STEP1_3 ; 1             ; 0             ; 0             ; 1          ; 0             ; 0             ;
-; state.STEP1_4 ; 0             ; 0             ; 0             ; 1          ; 0             ; 1             ;
-; state.STEP2_1 ; 0             ; 0             ; 0             ; 1          ; 1             ; 0             ;
-+---------------+---------------+---------------+---------------+------------+---------------+---------------+
++------------------------------------------------------------------------------------------------------------------------------------------------------+
+; State Machine - |sha256|state                                                                                                                        ;
++------------------+-----------+--------------+--------------+--------------+--------------+------------------+------------+------------+--------------+
+; Name             ; state.PAD ; state.READ_4 ; state.READ_3 ; state.READ_2 ; state.READ_1 ; state.ROUND_INIT ; state.INIT ; state.IDLE ; state.INIT_W ;
++------------------+-----------+--------------+--------------+--------------+--------------+------------------+------------+------------+--------------+
+; state.IDLE       ; 0         ; 0            ; 0            ; 0            ; 0            ; 0                ; 0          ; 0          ; 0            ;
+; state.INIT       ; 0         ; 0            ; 0            ; 0            ; 0            ; 0                ; 1          ; 1          ; 0            ;
+; state.ROUND_INIT ; 0         ; 0            ; 0            ; 0            ; 0            ; 1                ; 0          ; 1          ; 0            ;
+; state.READ_1     ; 0         ; 0            ; 0            ; 0            ; 1            ; 0                ; 0          ; 1          ; 0            ;
+; state.READ_2     ; 0         ; 0            ; 0            ; 1            ; 0            ; 0                ; 0          ; 1          ; 0            ;
+; state.READ_3     ; 0         ; 0            ; 1            ; 0            ; 0            ; 0                ; 0          ; 1          ; 0            ;
+; state.READ_4     ; 0         ; 1            ; 0            ; 0            ; 0            ; 0                ; 0          ; 1          ; 0            ;
+; state.PAD        ; 1         ; 0            ; 0            ; 0            ; 0            ; 0                ; 0          ; 1          ; 0            ;
+; state.INIT_W     ; 0         ; 0            ; 0            ; 0            ; 0            ; 0                ; 0          ; 1          ; 1            ;
++------------------+-----------+--------------+--------------+--------------+--------------+------------------+------------+------------+--------------+
 
 
-+--------------------------------------------------------------------------------+
-; Registers Removed During Synthesis                                             ;
-+---------------------------------------+----------------------------------------+
-; Register name                         ; Reason for Removal                     ;
-+---------------------------------------+----------------------------------------+
-; mem_we~reg0                           ; Stuck at GND due to stuck port data_in ;
-; state~10                              ; Lost fanout                            ;
-; state~11                              ; Lost fanout                            ;
-; Total Number of Removed Registers = 3 ;                                        ;
-+---------------------------------------+----------------------------------------+
++---------------------------------------------------------------------------------+
+; Registers Removed During Synthesis                                              ;
++----------------------------------------+----------------------------------------+
+; Register name                          ; Reason for Removal                     ;
++----------------------------------------+----------------------------------------+
+; block_index[1..15]                     ; Stuck at GND due to stuck port data_in ;
+; block_index[0]                         ; Stuck at VCC due to stuck port data_in ;
+; mem_we~reg0                            ; Stuck at GND due to stuck port data_in ;
+; state~13                               ; Lost fanout                            ;
+; state~14                               ; Lost fanout                            ;
+; state~15                               ; Lost fanout                            ;
+; state~17                               ; Lost fanout                            ;
+; state~18                               ; Lost fanout                            ;
+; state~19                               ; Lost fanout                            ;
+; state~20                               ; Lost fanout                            ;
+; state~21                               ; Lost fanout                            ;
+; state~22                               ; Lost fanout                            ;
+; state~23                               ; Lost fanout                            ;
+; state~24                               ; Lost fanout                            ;
+; state~25                               ; Lost fanout                            ;
+; state~26                               ; Lost fanout                            ;
+; state~27                               ; Lost fanout                            ;
+; state~28                               ; Lost fanout                            ;
+; state~29                               ; Lost fanout                            ;
+; state~30                               ; Lost fanout                            ;
+; state~31                               ; Lost fanout                            ;
+; state~32                               ; Lost fanout                            ;
+; state~33                               ; Lost fanout                            ;
+; state~34                               ; Lost fanout                            ;
+; state~35                               ; Lost fanout                            ;
+; state~36                               ; Lost fanout                            ;
+; state~37                               ; Lost fanout                            ;
+; state~38                               ; Lost fanout                            ;
+; state~39                               ; Lost fanout                            ;
+; state~40                               ; Lost fanout                            ;
+; state~41                               ; Lost fanout                            ;
+; state~42                               ; Lost fanout                            ;
+; state~43                               ; Lost fanout                            ;
+; state~44                               ; Lost fanout                            ;
+; row[5..15]                             ; Lost fanout                            ;
+; Total Number of Removed Registers = 59 ;                                        ;
++----------------------------------------+----------------------------------------+
+
+
++--------------------------------------------------------------------------------------------------------------------------+
+; Removed Registers Triggering Further Register Optimizations                                                              ;
++---------------+--------------------+-------------------------------------------------------------------------------------+
+; Register name ; Reason for Removal ; Registers Removed due to This Register                                              ;
++---------------+--------------------+-------------------------------------------------------------------------------------+
+; row[15]       ; Lost Fanouts       ; row[14], row[13], row[12], row[11], row[10], row[9], row[8], row[7], row[6], row[5] ;
++---------------+--------------------+-------------------------------------------------------------------------------------+
 
 
 +------------------------------------------------------+
@@ -271,23 +317,32 @@ Encoding Type:  One-Hot
 +----------------------------------------------+-------+
 ; Statistic                                    ; Value ;
 +----------------------------------------------+-------+
-; Total registers                              ; 38    ;
-; Number of registers using Synchronous Clear  ; 16    ;
-; Number of registers using Synchronous Load   ; 0     ;
-; Number of registers using Asynchronous Clear ; 6     ;
+; Total registers                              ; 46    ;
+; Number of registers using Synchronous Clear  ; 0     ;
+; Number of registers using Synchronous Load   ; 21    ;
+; Number of registers using Asynchronous Clear ; 9     ;
 ; Number of registers using Asynchronous Load  ; 0     ;
-; Number of registers using Clock Enable       ; 32    ;
+; Number of registers using Clock Enable       ; 37    ;
 ; Number of registers using Preset             ; 0     ;
 +----------------------------------------------+-------+
 
 
-+------------------------------------------------------------------------------------------------------------------------------------------+
-; Multiplexer Restructuring Statistics (Restructuring Performed)                                                                           ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
-; Multiplexer Inputs ; Bus Width ; Baseline Area ; Area if Restructured ; Saving if Restructured ; Registered ; Example Multiplexer Output ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
-; 4:1                ; 16 bits   ; 32 ALUTs      ; 0 ALUTs              ; 32 ALUTs               ; Yes        ; |sha256|count[15]          ;
-+--------------------+-----------+---------------+----------------------+------------------------+------------+----------------------------+
++------------------------------------------------------------------------------------------------------------------+
+; Parameter Settings for User Entity Instance: Top-level Entity: |sha256                                           ;
++----------------+----------------------------------------------------------------------------------+--------------+
+; Parameter Name ; Value                                                                            ; Type         ;
++----------------+----------------------------------------------------------------------------------+--------------+
+; sha256_k       ; (1116352408,1899447441,-1245643825,-373957723,961987163,1508970993,-1841331548,- ; Array/Record ;
+; sha256_k       ; 1424204075,-670586216,310598401,607225278,1426881987,1925078388,-2132889090,-168 ;              ;
+; sha256_k       ; 0079193,-1046744716,-459576895,-272742522,264347078,604807628,770255983,12491501 ;              ;
+; sha256_k       ; 22,1555081692,1996064986,-1740746414,-1473132947,-1341970488,-1084653625,-958395 ;              ;
+; sha256_k       ; 405,-710438585,113926993,338241895,666307205,773529912,1294757372,1396182291,169 ;              ;
+; sha256_k       ; 5183700,1986661051,-2117940946,-1838011259,-1564481375,-1474664885,-1035236496,- ;              ;
+; sha256_k       ; 949202525,-778901479,-694614492,-200395387,275423344,430227734,506948616,6590605 ;              ;
+; sha256_k       ; 56,883997877,958139571,1322822218,1537002063,1747873779,1955562222,2024104815,-2 ;              ;
+;                ; 067236844,-1933114872,-1866530822,-1538233109,-1090935817,-965641998)            ;              ;
++----------------+----------------------------------------------------------------------------------+--------------+
+Note: In order to hide this table in the UI and the text report file, please set the "Show Parameter Settings in Synthesis Report" option in "Analysis and Synthesis Settings -> More Settings" to "Off".
 
 
 +-----------------------------------------------------+
@@ -295,25 +350,24 @@ Encoding Type:  One-Hot
 +-----------------------+-----------------------------+
 ; Type                  ; Count                       ;
 +-----------------------+-----------------------------+
-; arriaii_ff            ; 38                          ;
-;     CLR               ; 6                           ;
+; arriaii_ff            ; 46                          ;
+;     CLR               ; 9                           ;
 ;     ENA               ; 16                          ;
-;     ENA SCLR          ; 16                          ;
+;     ENA SLD           ; 21                          ;
 ; boundary_port         ; 182                         ;
-; stratixiv_lcell_comb  ; 47                          ;
-;     arith             ; 32                          ;
-;         1 data inputs ; 16                          ;
+; stratixiv_lcell_comb  ; 65                          ;
+;     arith             ; 37                          ;
+;         1 data inputs ; 21                          ;
 ;         2 data inputs ; 16                          ;
-;     normal            ; 15                          ;
+;     normal            ; 28                          ;
 ;         0 data inputs ; 1                           ;
-;         2 data inputs ; 1                           ;
+;         2 data inputs ; 23                          ;
 ;         3 data inputs ; 1                           ;
 ;         4 data inputs ; 2                           ;
-;         5 data inputs ; 2                           ;
-;         6 data inputs ; 8                           ;
+;         6 data inputs ; 1                           ;
 ;                       ;                             ;
-; Max LUT depth         ; 3.00                        ;
-; Average LUT depth     ; 1.99                        ;
+; Max LUT depth         ; 2.50                        ;
+; Average LUT depth     ; 1.49                        ;
 +-----------------------+-----------------------------+
 
 
@@ -332,7 +386,7 @@ Encoding Type:  One-Hot
 Info: *******************************************************************
 Info: Running Quartus Prime Analysis & Synthesis
     Info: Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
-    Info: Processing started: Wed Feb 14 18:29:59 2018
+    Info: Processing started: Wed Feb 14 23:24:23 2018
 Info: Command: quartus_map --read_settings_files=on --write_settings_files=off sha256 -c sha256
 Warning (18236): Number of processors has not been specified which may cause overloading on shared machines.  Set the global assignment NUM_PARALLEL_PROCESSORS in your QSF to an appropriate value for best performance.
 Info (20030): Parallel compilation is enabled and will use 2 of the 2 processors detected
@@ -341,12 +395,23 @@ Info (12021): Found 1 design units, including 1 entities, in source file tb_sha2
 Info (12021): Found 1 design units, including 1 entities, in source file sha256.sv
     Info (12023): Found entity 1: sha256 File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 1
 Info (12127): Elaborating entity "sha256" for the top level hierarchy
-Warning (10036): Verilog HDL or VHDL warning at sha256.sv(20): object "message" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 20
-Warning (10230): Verilog HDL assignment warning at sha256.sv(45): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 45
-Warning (10230): Verilog HDL assignment warning at sha256.sv(59): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 59
-Warning (10240): Verilog HDL Always Construct warning at sha256.sv(24): inferring latch(es) for variable "done", which holds its previous value in one or more paths through the always construct File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 24
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(41): object "total_blocks" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 41
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(69): object "a" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 69
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(70): object "b" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 70
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(71): object "c" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 71
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(72): object "d" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 72
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(73): object "e" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 73
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(74): object "f" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 74
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(75): object "g" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 75
+Warning (10036): Verilog HDL or VHDL warning at sha256.sv(76): object "h" assigned a value but never read File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 76
+Warning (10230): Verilog HDL assignment warning at sha256.sv(28): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 28
+Warning (10230): Verilog HDL assignment warning at sha256.sv(30): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 30
+Warning (10230): Verilog HDL assignment warning at sha256.sv(143): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 143
+Warning (10230): Verilog HDL assignment warning at sha256.sv(157): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 157
+Warning (10230): Verilog HDL assignment warning at sha256.sv(158): truncated value with size 32 to match size of target (16) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 158
+Warning (10240): Verilog HDL Always Construct warning at sha256.sv(81): inferring latch(es) for variable "done", which holds its previous value in one or more paths through the always construct File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 81
 Warning (10034): Output port "mem_write_data" at sha256.sv(5) has no driver File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 5
-Info (10041): Inferred latch for "done" at sha256.sv(24) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 24
+Info (10041): Inferred latch for "done" at sha256.sv(81) File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 81
 Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "done" is stuck at GND File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 3
     Warning (13410): Pin "mem_we" is stuck at GND File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 3
@@ -383,10 +448,11 @@ Warning (13024): Output pins are stuck at VCC or GND
     Warning (13410): Pin "mem_write_data[30]" is stuck at GND File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 5
     Warning (13410): Pin "mem_write_data[31]" is stuck at GND File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 5
 Info (286030): Timing-Driven Synthesis is running
-Info (17049): 2 registers lost all their fanouts during netlist optimizations.
+Info (17049): 42 registers lost all their fanouts during netlist optimizations.
+Info (144001): Generated suppressed messages file C:/intelFPGA_lite/17.1/project4/output_files/sha256.map.smsg
 Info (16010): Generating hard_block partition "hard_block:auto_generated_inst"
     Info (16011): Adding 0 node(s), including 0 DDIO, 0 PLL, 0 transceiver and 0 LCELL
-Warning (21074): Design contains 82 input pin(s) that do not drive logic
+Warning (21074): Design contains 112 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "message_addr[16]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "message_addr[17]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "message_addr[18]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
@@ -405,6 +471,36 @@ Warning (21074): Design contains 82 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "message_addr[31]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "size[0]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "size[1]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[2]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[3]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[4]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[5]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[6]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[7]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[8]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[9]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[10]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[11]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[12]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[13]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[14]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[15]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[16]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[17]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[18]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[19]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[20]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[21]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[22]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[23]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[24]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[25]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[26]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[27]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[28]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[29]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[30]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
+    Warning (15610): No output dependent on input pin "size[31]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "output_addr[0]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "output_addr[1]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
     Warning (15610): No output dependent on input pin "output_addr[2]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 2
@@ -469,14 +565,20 @@ Warning (21074): Design contains 82 input pin(s) that do not drive logic
     Warning (15610): No output dependent on input pin "mem_read_data[29]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 6
     Warning (15610): No output dependent on input pin "mem_read_data[30]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 6
     Warning (15610): No output dependent on input pin "mem_read_data[31]" File: C:/intelFPGA_lite/17.1/project4/sha256.sv Line: 6
-Info (21057): Implemented 231 device resources after synthesis - the final resource count might be different
+Info (21057): Implemented 251 device resources after synthesis - the final resource count might be different
     Info (21058): Implemented 131 input pins
     Info (21059): Implemented 51 output pins
-    Info (21061): Implemented 49 logic cells
-Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 124 warnings
-    Info: Peak virtual memory: 732 megabytes
-    Info: Processing ended: Wed Feb 14 18:30:15 2018
+    Info (21061): Implemented 69 logic cells
+Info: Quartus Prime Analysis & Synthesis was successful. 0 errors, 165 warnings
+    Info: Peak virtual memory: 734 megabytes
+    Info: Processing ended: Wed Feb 14 23:24:39 2018
     Info: Elapsed time: 00:00:16
-    Info: Total CPU time (on all processors): 00:00:37
+    Info: Total CPU time (on all processors): 00:00:34
+
+
++------------------------------------------+
+; Analysis & Synthesis Suppressed Messages ;
++------------------------------------------+
+The suppressed messages can be found in C:/intelFPGA_lite/17.1/project4/output_files/sha256.map.smsg.
 
 

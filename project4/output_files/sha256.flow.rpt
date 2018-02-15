@@ -1,5 +1,5 @@
 Flow report for sha256
-Wed Feb 14 18:30:15 2018
+Wed Feb 14 23:24:39 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -40,7 +40,7 @@ refer to the applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Flow Summary                                                                    ;
 +-----------------------------------+---------------------------------------------+
-; Flow Status                       ; Successful - Wed Feb 14 18:30:15 2018       ;
+; Flow Status                       ; Successful - Wed Feb 14 23:24:39 2018       ;
 ; Quartus Prime Version             ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                     ; sha256                                      ;
 ; Top-level Entity Name             ; sha256                                      ;
@@ -48,10 +48,10 @@ refer to the applicable agreement for further details.
 ; Device                            ; EP2AGX45DF29I5                              ;
 ; Timing Models                     ; Final                                       ;
 ; Logic utilization                 ; N/A                                         ;
-;     Combinational ALUTs           ; 46                                          ;
+;     Combinational ALUTs           ; 64                                          ;
 ;     Memory ALUTs                  ; 0                                           ;
-;     Dedicated logic registers     ; 38                                          ;
-; Total registers                   ; 38                                          ;
+;     Dedicated logic registers     ; 46                                          ;
+; Total registers                   ; 46                                          ;
 ; Total pins                        ; 182                                         ;
 ; Total virtual pins                ; 0                                           ;
 ; Total block memory bits           ; 0                                           ;
@@ -70,7 +70,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 02/14/2018 18:30:00 ;
+; Start date & time ; 02/14/2018 23:24:24 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; sha256              ;
 +-------------------+---------------------+
@@ -81,7 +81,7 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+-------------+----------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name ; Section Id     ;
 +-------------------------------------+----------------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 68263185393198.151866180006920         ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID               ; 68263185393198.151867946409816         ; --            ; --          ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Verilog Hdl                            ; --            ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (Verilog)              ; <None>        ; --          ; --             ;
 ; EDA_TIME_SCALE                      ; 1 ps                                   ; --            ; --          ; eda_simulation ;
@@ -99,8 +99,8 @@ refer to the applicable agreement for further details.
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 ; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:16     ; 1.0                     ; 724 MB              ; 00:00:37                           ;
-; Total                ; 00:00:16     ; --                      ; --                  ; 00:00:37                           ;
+; Analysis & Synthesis ; 00:00:15     ; 1.0                     ; 724 MB              ; 00:00:34                           ;
+; Total                ; 00:00:15     ; --                      ; --                  ; 00:00:34                           ;
 +----------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
