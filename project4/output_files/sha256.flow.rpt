@@ -1,5 +1,5 @@
 Flow report for sha256
-Wed Feb 14 23:24:39 2018
+Sun Feb 18 16:46:18 2018
 Quartus Prime Version 17.1.0 Build 590 10/25/2017 SJ Lite Edition
 
 
@@ -40,28 +40,28 @@ refer to the applicable agreement for further details.
 +---------------------------------------------------------------------------------+
 ; Flow Summary                                                                    ;
 +-----------------------------------+---------------------------------------------+
-; Flow Status                       ; Successful - Wed Feb 14 23:24:39 2018       ;
+; Flow Status                       ; Successful - Sun Feb 18 15:56:30 2018       ;
 ; Quartus Prime Version             ; 17.1.0 Build 590 10/25/2017 SJ Lite Edition ;
 ; Revision Name                     ; sha256                                      ;
 ; Top-level Entity Name             ; sha256                                      ;
 ; Family                            ; Arria II GX                                 ;
 ; Device                            ; EP2AGX45DF29I5                              ;
 ; Timing Models                     ; Final                                       ;
-; Logic utilization                 ; N/A                                         ;
-;     Combinational ALUTs           ; 64                                          ;
-;     Memory ALUTs                  ; 0                                           ;
-;     Dedicated logic registers     ; 46                                          ;
-; Total registers                   ; 46                                          ;
-; Total pins                        ; 182                                         ;
+; Logic utilization                 ; 68 %                                        ;
+;     Combinational ALUTs           ; 23,650 / 36,100 ( 66 % )                    ;
+;     Memory ALUTs                  ; 0 / 18,050 ( 0 % )                          ;
+;     Dedicated logic registers     ; 895 / 36,100 ( 2 % )                        ;
+; Total registers                   ; 895                                         ;
+; Total pins                        ; 182 / 404 ( 45 % )                          ;
 ; Total virtual pins                ; 0                                           ;
-; Total block memory bits           ; 0                                           ;
-; DSP block 18-bit elements         ; 0                                           ;
-; Total GXB Receiver Channel PCS    ; 0                                           ;
-; Total GXB Receiver Channel PMA    ; 0                                           ;
-; Total GXB Transmitter Channel PCS ; 0                                           ;
-; Total GXB Transmitter Channel PMA ; 0                                           ;
-; Total PLLs                        ; 0                                           ;
-; Total DLLs                        ; 0                                           ;
+; Total block memory bits           ; 0 / 2,939,904 ( 0 % )                       ;
+; DSP block 18-bit elements         ; 0 / 232 ( 0 % )                             ;
+; Total GXB Receiver Channel PCS    ; 0 / 8 ( 0 % )                               ;
+; Total GXB Receiver Channel PMA    ; 0 / 8 ( 0 % )                               ;
+; Total GXB Transmitter Channel PCS ; 0 / 8 ( 0 % )                               ;
+; Total GXB Transmitter Channel PMA ; 0 / 8 ( 0 % )                               ;
+; Total PLLs                        ; 0 / 4 ( 0 % )                               ;
+; Total DLLs                        ; 0 / 2 ( 0 % )                               ;
 +-----------------------------------+---------------------------------------------+
 
 
@@ -70,7 +70,7 @@ refer to the applicable agreement for further details.
 +-------------------+---------------------+
 ; Option            ; Setting             ;
 +-------------------+---------------------+
-; Start date & time ; 02/14/2018 23:24:24 ;
+; Start date & time ; 02/18/2018 15:46:13 ;
 ; Main task         ; Compilation         ;
 ; Revision Name     ; sha256              ;
 +-------------------+---------------------+
@@ -81,7 +81,7 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+-------------+----------------+
 ; Assignment Name                     ; Value                                  ; Default Value ; Entity Name ; Section Id     ;
 +-------------------------------------+----------------------------------------+---------------+-------------+----------------+
-; COMPILER_SIGNATURE_ID               ; 68263185393198.151867946409816         ; --            ; --          ; --             ;
+; COMPILER_SIGNATURE_ID               ; 68263185393198.151899757304312         ; --            ; --          ; --             ;
 ; EDA_OUTPUT_DATA_FORMAT              ; Verilog Hdl                            ; --            ; --          ; eda_simulation ;
 ; EDA_SIMULATION_TOOL                 ; ModelSim-Altera (Verilog)              ; <None>        ; --          ; --             ;
 ; EDA_TIME_SCALE                      ; 1 ps                                   ; --            ; --          ; eda_simulation ;
@@ -94,29 +94,35 @@ refer to the applicable agreement for further details.
 +-------------------------------------+----------------------------------------+---------------+-------------+----------------+
 
 
-+--------------------------------------------------------------------------------------------------------------------------+
-; Flow Elapsed Time                                                                                                        ;
-+----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Module Name          ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
-+----------------------+--------------+-------------------------+---------------------+------------------------------------+
-; Analysis & Synthesis ; 00:00:15     ; 1.0                     ; 724 MB              ; 00:00:34                           ;
-; Total                ; 00:00:15     ; --                      ; --                  ; 00:00:34                           ;
-+----------------------+--------------+-------------------------+---------------------+------------------------------------+
++-------------------------------------------------------------------------------------------------------------------------------+
+; Flow Elapsed Time                                                                                                             ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Module Name               ; Elapsed Time ; Average Processors Used ; Peak Virtual Memory ; Total CPU Time (on all processors) ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
+; Analysis & Synthesis      ; 00:00:46     ; 1.0                     ; 874 MB              ; 00:00:56                           ;
+; Fitter                    ; 00:09:26     ; 1.0                     ; 1791 MB             ; 00:14:51                           ;
+; TimeQuest Timing Analyzer ; 00:00:31     ; 1.4                     ; 1132 MB             ; 00:00:35                           ;
+; Total                     ; 00:10:43     ; --                      ; --                  ; 00:16:22                           ;
++---------------------------+--------------+-------------------------+---------------------+------------------------------------+
 
 
-+------------------------------------------------------------------------------------+
-; Flow OS Summary                                                                    ;
-+----------------------+------------------+------------+------------+----------------+
-; Module Name          ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
-+----------------------+------------------+------------+------------+----------------+
-; Analysis & Synthesis ; DESKTOP-L2H5UVM  ; Windows 10 ; 10.0       ; x86_64         ;
-+----------------------+------------------+------------+------------+----------------+
++-----------------------------------------------------------------------------------------+
+; Flow OS Summary                                                                         ;
++---------------------------+------------------+------------+------------+----------------+
+; Module Name               ; Machine Hostname ; OS Name    ; OS Version ; Processor type ;
++---------------------------+------------------+------------+------------+----------------+
+; Analysis & Synthesis      ; DESKTOP-L2H5UVM  ; Windows 10 ; 10.0       ; x86_64         ;
+; Fitter                    ; DESKTOP-L2H5UVM  ; Windows 10 ; 10.0       ; x86_64         ;
+; TimeQuest Timing Analyzer ; DESKTOP-L2H5UVM  ; Windows 10 ; 10.0       ; x86_64         ;
++---------------------------+------------------+------------+------------+----------------+
 
 
 ------------
 ; Flow Log ;
 ------------
 quartus_map --read_settings_files=on --write_settings_files=off sha256 -c sha256
+quartus_fit --read_settings_files=on --write_settings_files=off sha256 -c sha256
+quartus_sta sha256 -c sha256
 
 
 

@@ -20,15 +20,44 @@ module sha256(input logic clk, reset_n, start,
 	};
 	
 	// states
-	enum logic [31:0] {IDLE=0, INIT=1, ROUND_INIT=2, READ_1=3, READ_2=4, READ_3=5, READ_4=6, PAD=7, INIT_W=8} state;
+	enum logic [31:0] {IDLE=0, INIT=1, ROUND_INIT=2, 
+							READ_1=3, READ_2=4, READ_3=5, READ_4=6, 
+							PAD=7, INIT_W=8, CHECK_IF_DONE=9, 
+							WRITE_1 = 10, WRITE_2 = 11, WRITE_3 = 12} state;
 		
 	/* FUNCTIONS */ 
+	
+	// calculate total number of blocks used
 	function logic [15:0] num_blocks(input logic [31:0] size = 0);
 		if((size << 3) % 512 < 447) begin
 			num_blocks = (size << 3)/512 + 1;
 		end else begin
 			num_blocks = (size << 3)/512 + 2;
 		end
+	endfunction
+	
+	// sha256 round
+	function logic [255:0] sha256_op(input logic [31:0] a, b, c, d, e, f, g, h, w,
+                                 input logic [7:0] t);
+		logic [31:0] S1, S0, ch, maj, t1, t2; // internal signals
+	begin
+		 S1 = rightrotate(e, 6) ^ rightrotate(e, 11) ^ rightrotate(e, 25);
+		 ch = (e & f) ^ ((~e) & g);
+		 t1 = h + S1 + ch + sha256_k[t] + w;
+		 S0 = rightrotate(a, 2) ^ rightrotate(a, 13) ^ rightrotate(a, 22);
+		 maj = (a & b) ^ (a & c) ^ (b & c);
+		 t2 = S0 + maj;
+
+		 sha256_op = {t1 + t2, a, b, c, d + t1, e, f, g};
+	end
+	endfunction
+	
+	// right rotation
+	function logic [31:0] rightrotate(input logic [31:0] x,
+												 input logic [7:0] r);
+	begin
+		 rightrotate = (x >> r) | (x << (32-r));
+	end
 	endfunction
 	
 	/* VARIABLES */
@@ -53,7 +82,7 @@ module sha256(input logic clk, reset_n, start,
 	logic [15:0] row;
 	
 	// used for padding
-	logic [31:0] pad_length;
+	logic [31:0] pad_length, s0, s1;
 	
 	// message digest
 	logic [31:0] h0;
@@ -78,6 +107,9 @@ module sha256(input logic clk, reset_n, start,
 	// intermediate w array
 	logic [31:0] w [0:63];
 	
+	// condition to trigger if last block is zero filled with length
+	logic last_block_empty;
+	
 	always_ff @(posedge clk, negedge reset_n)
 	begin
 		if(!reset_n) begin
@@ -98,7 +130,7 @@ module sha256(input logic clk, reset_n, start,
 				INIT: begin
 					// determine number of loops
 					total_blocks <= num_blocks(size);
-					
+										
 					// initialize block index counter
 					block_index <= 1;
 					
@@ -114,15 +146,133 @@ module sha256(input logic clk, reset_n, start,
 					
 					// memory index
 					mem_index <= 0;
-					state <= ROUND_INIT;
+					
+					// don't know if last block empty or not
+					last_block_empty <= 0;
+					
+					state <= ROUND_INIT;	
 				end
 				
 				/* Happens every round */
 				ROUND_INIT: begin
+					
+					$display("Total blocks: %d\n", total_blocks);
+
 					// set block row counter to zero
 					row <= 0;
 					
-					// set intermediate message digest values to old message digest value
+					state <= READ_1;
+				end
+				
+				/* START READING 512 BIT BLOCK */
+				READ_1: begin
+					//$display("READ_1\n");
+					if(last_block_empty) begin
+						
+						// pad with zeros until last two rows are left
+						for (m = 0; m < 14; m = m + 1) begin
+							block[m] = 32'h00000000;
+						end
+						
+						// fill last two rows with length
+						block[14] = size >> 29; // append length of message in bits (before pre-processing)
+						block[15] = size * 8;
+						state <= INIT_W;
+					end
+					mem_we <= 0;
+					mem_addr <= message_addr + mem_index;
+					state <= READ_2;
+				end
+				
+				READ_2: begin
+					//$display("READ_2\n");
+					
+					state <= READ_3;
+				end
+				
+				READ_3: begin
+					//$display("READ_3\n");
+					
+					// last row of message, do transition padding
+					if(size/4 == mem_index) begin
+						case (size % 4) // pad bit 1
+							0: block[size/4 % 16] = 32'h80000000;
+							1: block[size/4 % 16] = mem_read_data & 32'h FF000000 | 32'h 00800000;
+							2: block[size/4 % 16] = mem_read_data & 32'h FFFF0000 | 32'h 00008000;
+							3: block[size/4 % 16] = mem_read_data & 32'h FFFFFF00 | 32'h 00000080;
+						endcase
+						
+						// check if there's enough room to put the length at end of block
+						if(row < 14) begin
+							
+							// pad with zeros until last two rows are left
+							for (m = 0; m < 14; m = m + 1) begin
+								if(m >= ((size/4) % 16) + 1) 
+									block[m] = 32'h00000000;
+							end
+							
+							// fill last two rows with length
+							block[14] = size >> 29; // append length of message in bits (before pre-processing)
+							block[15] = size * 8;
+							state <= INIT_W;
+						end
+						
+						// Not enough room to put length at end of block
+						else begin
+							// fill rest of block with zeros
+							for (m = 0; m < 16; m = m + 1) begin
+								if(m >= ((size/4) % 16) + 1) 
+									block[m] = 32'h00000000;
+							end
+							
+							// trigger condition to fill next block with zeros and length
+							last_block_empty = 1;
+							state <= INIT_W;
+						end
+					end
+					else begin
+						block[row] <= mem_read_data;
+						mem_index <= mem_index + 1;
+						row <= row + 1;
+						state <= READ_4;
+					end
+				end
+				
+				READ_4: begin
+					//$display("READ_4\n");
+		
+					// if last row in block has been read
+					if(row % 16 == 0) begin
+						state <= INIT_W;
+					end
+					
+					// more rows to read into block	
+					else begin
+						state <= READ_1;
+					end
+				end
+				
+				/* END READ 512 BIT BLOCK */
+				
+				INIT_W:begin
+					
+					for(int i = 0; i < 16; i++) begin
+						$display("Address: %d", i);
+						$display(" Value: %h \n", block[i]);
+					end
+					
+					for (int t = 0; t < 64; t = t + 1) begin
+						if (t < 16) begin
+							w[t] = block[t];
+					
+						end else begin
+							s0 = rightrotate(w[t-15], 7) ^ rightrotate(w[t-15], 18) ^ (w[t-15] >> 3);
+							s1 = rightrotate(w[t-2], 17) ^ rightrotate(w[t-2], 19) ^ (w[t-2] >> 10);
+							w[t] = w[t-16] + s0 + w[t-7] + s1;
+						end
+					end
+					
+					// INITIAL HASH AT ROUND K
 					a = h0;
 					b = h1;
 					c = h2;
@@ -131,100 +281,67 @@ module sha256(input logic clk, reset_n, start,
 					f = h5;
 					g = h6;
 					h = h7;
-					
-					state <= READ_1;
-				end
-				
-				/* START READING 512 BIT BLOCK */
-				READ_1: begin
-					$display("READ_1\n");
 
-					mem_we <= 0;
-					mem_addr <= message_addr + mem_index;
-					state <= READ_2;
-				end
-				
-				READ_2: begin
-					$display("READ_2\n");
-					
-					state <= READ_3;
-				end
-				
-				READ_3: begin
-					$display("READ_3\n");
+					// HASH ROUNDS
+					for (int t = 0; t < 64; t = t + 1) begin
+						{a, b, c, d, e, f, g, h} = sha256_op(a, b, c, d, e, f, g, h, w[t], t);
+					end
 
-					block[row] <= mem_read_data;
-					mem_index <= mem_index + 1;
-					row <= row + 1;
-					state <= READ_4;
-				end
+					// FINAL HASH
+					h0 = h0 + a;
+					h1 = h1 + b;
+					h2 = h2 + c;
+					h3 = h3 + d;
+					h4 = h4 + e;
+					h5 = h5 + f;
+					h6 = h6 + g;
+					h7 = h7 + h;
+					
+					state <= CHECK_IF_DONE;
 				
-				READ_4: begin
-					$display("READ_4\n");
-					
-					// if last row in block has been read
-					if(row % 32 == 0) begin
-					
-						// if this is the last block
-						if(block_index == num_blocks)begin
-							state <= PAD;
-						end 
-						// else got to SHA 256 round
-						else begin
-							state <= INIT_W;
-						end
-						
-					// block not filled up
+				end
+
+				CHECK_IF_DONE: begin
+					if(block_index == total_blocks) begin
+						// write message digest to output memory addresses
+						row <= 0;
+						state <= WRITE_1;
 					end else begin
-						state <= READ_1;
+						block_index <= block_index + 1;
+						state <= ROUND_INIT;
 					end
-				end
+				end	
 				
-				/* END READ 512 BIT BLOCK */
-				
-				/* PAD IF NECESSARY */
-				PAD: begin
-//					// padding algorithm
-//					if ((size + 1) % 64 <= 56 && (size + 1) % 64 > 0)
-//						pad_length <= (size/64)*64 + 56;
-//					else
-//						pad_length <= (size/64+1)*64 + 56;
-						
-
-					case (size % 4) // pad bit 1
-						0: block[size/4 % 16] = 32'h80000000;
-						1: block[size/4 % 16] = block[size/4 % 16] & 32'h FF000000 | 32'h 00800000;
-						2: block[size/4 % 16] = block[size/4 % 16] & 32'h FFFF0000 | 32'h 00008000;
-						3: block[size/4 % 16] = block[size/4 % 16] & 32'h FFFFFF00 | 32'h 00000080;
+				WRITE_1: begin
+					mem_we <= 1;
+					mem_addr <= output_addr + row;
+					case(row)
+						0: mem_write_data <= h0;
+						1: mem_write_data <= h1;
+						2: mem_write_data <= h2;
+						3: mem_write_data <= h3;
+						4: mem_write_data <= h4;
+						5: mem_write_data <= h5;
+						6: mem_write_data <= h6;
+						7: mem_write_data <= h7;
 					endcase
-
-					for (m = 0; m < 13; m = m + 1) begin
-						if(m >= ((size/4) % 16) + 1) 
-							block[m] = 32'h00000000;
-					end
-
-					block[14] = size >> 29; // append length of message in bits (before pre-processing)
-					block[15] = size * 8;
-					state <= INIT_W;
+					state <= WRITE_2;
 				end
 				
-				INIT_W:begin
-					for(int i = 0; i < 16; i++) begin
-						$display("Address: %d", i);
-						$display(" Value: %h \n", block[i]);
-					end
-					state <= IDLE;
+				WRITE_2: begin
+					state <= WRITE_3;
 				end
-//				
-//				COMPUTE_ABCD: begin
-//				end
-//				
-//				COMPUTE_NEW_MD: begin
-//				end
-//				
-//				CHECK_IF_DONE: begin
-//				end
 				
+				WRITE_3: begin
+					if(row == 7) begin
+						done <= 1;
+						state <= IDLE;
+					end
+					else begin
+						row <= row + 1;
+						state <= WRITE_1;
+					end
+				end
 			endcase
 		end	
 	end

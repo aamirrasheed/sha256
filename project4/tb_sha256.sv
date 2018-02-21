@@ -14,7 +14,7 @@ logic   [ 31:0] dpsram_tb[0:16383]; // for result testing, testbench only
 
 logic   [ 31:0] message_seed = 32'h01234567; // modify message_seed to test your design
 
-int             message_size = 12; // in bytes // change this number to test your design
+int             message_size = 64; // in bytes // change this number to test your design
 int             pad_length;
 
 int             t, m;
