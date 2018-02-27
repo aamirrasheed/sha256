@@ -23,7 +23,8 @@ module sha256(input logic clk, reset_n, start,
 	enum logic [31:0] {IDLE=0, INIT=1, ROUND_INIT=2, 
 							READ_1=3, READ_2=4, READ_3=5, READ_4=6, 
 							PAD=7, INIT_W=8, CHECK_IF_DONE=9, 
-							WRITE_1 = 10, WRITE_2 = 11, WRITE_3 = 12} state;
+							WRITE_1 = 10, WRITE_2 = 11, WRITE_3 = 12,
+							READ_3_1 = 13, READ_3_2 = 14} state;
 		
 	/* FUNCTIONS */ 
 	
@@ -183,7 +184,8 @@ module sha256(input logic clk, reset_n, start,
 					mem_addr <= message_addr + mem_index;
 					state <= READ_2;
 				end
-				
+
+				// idle state to let memory propagate
 				READ_2: begin
 					//$display("READ_2\n");
 					
@@ -196,25 +198,15 @@ module sha256(input logic clk, reset_n, start,
 					// last row of message, do transition padding
 					if(size/4 == mem_index) begin
 						case (size % 4) // pad bit 1
-							0: block[size/4 % 16] = 32'h80000000;
-							1: block[size/4 % 16] = mem_read_data & 32'h FF000000 | 32'h 00800000;
-							2: block[size/4 % 16] = mem_read_data & 32'h FFFF0000 | 32'h 00008000;
-							3: block[size/4 % 16] = mem_read_data & 32'h FFFFFF00 | 32'h 00000080;
+							0: block[size/4 % 16] <= 32'h80000000;
+							1: block[size/4 % 16] <= mem_read_data & 32'h FF000000 | 32'h 00800000;
+							2: block[size/4 % 16] <= mem_read_data & 32'h FFFF0000 | 32'h 00008000;
+							3: block[size/4 % 16] <= mem_read_data & 32'h FFFFFF00 | 32'h 00000080;
 						endcase
 						
 						// check if there's enough room to put the length at end of block
 						if(row < 14) begin
-							
-							// pad with zeros until last two rows are left
-							for (m = 0; m < 14; m = m + 1) begin
-								if(m >= ((size/4) % 16) + 1) 
-									block[m] = 32'h00000000;
-							end
-							
-							// fill last two rows with length
-							block[14] = size >> 29; // append length of message in bits (before pre-processing)
-							block[15] = size * 8;
-							state <= INIT_W;
+							state <= READ_3_1;
 						end
 						
 						// Not enough room to put length at end of block
@@ -236,6 +228,26 @@ module sha256(input logic clk, reset_n, start,
 						row <= row + 1;
 						state <= READ_4;
 					end
+				end
+				
+				// second half padding - no empty last block
+				READ_3_1: begin
+					// pad with zeros until last two rows are left
+					for (m = 0; m < 14; m = m + 1) begin
+						if(m >= ((size/4) % 16) + 1) 
+							block[m] = 32'h00000000;
+					end
+					
+					// fill last two rows with length
+					block[14] = size >> 29; // append length of message in bits (before pre-processing)
+					block[15] = size * 8;
+					state <= INIT_W;
+
+				end
+				
+				// second half padding - empty last block
+				READ_3_2: begin
+					
 				end
 				
 				READ_4: begin
