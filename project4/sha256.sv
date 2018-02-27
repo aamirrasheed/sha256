@@ -206,7 +206,17 @@ module sha256(input logic clk, reset_n, start,
 						
 						// check if there's enough room to put the length at end of block
 						if(row < 14) begin
-							state <= READ_3_1;
+							
+							// pad with zeros until last two rows are left
+							for (m = 0; m < 14; m = m + 1) begin
+								if(m >= ((size/4) % 16) + 1) 
+									block[m] <= 32'h00000000;
+							end
+							
+							// fill last two rows with length
+							block[14] <= size >> 29; // append length of message in bits (before pre-processing)
+							block[15] <= size * 8;
+							state <= INIT_W;
 						end
 						
 						// Not enough room to put length at end of block
@@ -214,7 +224,7 @@ module sha256(input logic clk, reset_n, start,
 							// fill rest of block with zeros
 							for (m = 0; m < 16; m = m + 1) begin
 								if(m >= ((size/4) % 16) + 1) 
-									block[m] = 32'h00000000;
+									block[m] <= 32'h00000000;
 							end
 							
 							// trigger condition to fill next block with zeros and length
@@ -232,20 +242,9 @@ module sha256(input logic clk, reset_n, start,
 				
 				// second half padding - no empty last block
 				READ_3_1: begin
-					// pad with zeros until last two rows are left
-					for (m = 0; m < 14; m = m + 1) begin
-						if(m >= ((size/4) % 16) + 1) 
-							block[m] = 32'h00000000;
-					end
-					
-					// fill last two rows with length
-					block[14] = size >> 29; // append length of message in bits (before pre-processing)
-					block[15] = size * 8;
-					state <= INIT_W;
-
+				
 				end
 				
-				// second half padding - empty last block
 				READ_3_2: begin
 					
 				end
