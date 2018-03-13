@@ -22,11 +22,8 @@ module sha256(input logic clk, reset_n, start,
 	// states
 	enum logic [31:0] {IDLE=0, INIT=1, ROUND_INIT=2, 
 							READ_1=3, READ_2=4, READ_3=5, READ_4=6, 
-							PAD=7, INIT_W_1=8, CHECK_IF_DONE=9, 
-							WRITE_1 = 10, WRITE_2 = 11, WRITE_3 = 12,
-							INIT_W_2 = 13, 
-							INIT_W_3_1 = 14, INIT_W_3_2 = 15, INIT_W_3_3 = 16, 
-							SHA256 = 17} state;
+							PAD=7, INIT_W=8, CHECK_IF_DONE=9, 
+							WRITE_1 = 10, WRITE_2 = 11, WRITE_3 = 12} state;
 		
 	/* FUNCTIONS */ 
 	
@@ -66,12 +63,6 @@ module sha256(input logic clk, reset_n, start,
 	/* VARIABLES */
 	// used for pad loop
 	int m;
-	
-	// used for w fill loop
-	int t; 
-	
-	// used for SHA loop
-	int k;
 	
 	assign mem_clk = clk;
 	
@@ -186,14 +177,13 @@ module sha256(input logic clk, reset_n, start,
 						// fill last two rows with length
 						block[14] = size >> 29; // append length of message in bits (before pre-processing)
 						block[15] = size * 8;
-						state <= INIT_W_1;
+						state <= INIT_W;
 					end
 					mem_we <= 0;
 					mem_addr <= message_addr + mem_index;
 					state <= READ_2;
 				end
-
-				// idle state to let memory propagate
+				
 				READ_2: begin
 					//$display("READ_2\n");
 					
@@ -206,10 +196,10 @@ module sha256(input logic clk, reset_n, start,
 					// last row of message, do transition padding
 					if(size/4 == mem_index) begin
 						case (size % 4) // pad bit 1
-							0: block[size/4 % 16] <= 32'h80000000;
-							1: block[size/4 % 16] <= mem_read_data & 32'h FF000000 | 32'h 00800000;
-							2: block[size/4 % 16] <= mem_read_data & 32'h FFFF0000 | 32'h 00008000;
-							3: block[size/4 % 16] <= mem_read_data & 32'h FFFFFF00 | 32'h 00000080;
+							0: block[size/4 % 16] = 32'h80000000;
+							1: block[size/4 % 16] = mem_read_data & 32'h FF000000 | 32'h 00800000;
+							2: block[size/4 % 16] = mem_read_data & 32'h FFFF0000 | 32'h 00008000;
+							3: block[size/4 % 16] = mem_read_data & 32'h FFFFFF00 | 32'h 00000080;
 						endcase
 						
 						// check if there's enough room to put the length at end of block
@@ -218,13 +208,13 @@ module sha256(input logic clk, reset_n, start,
 							// pad with zeros until last two rows are left
 							for (m = 0; m < 14; m = m + 1) begin
 								if(m >= ((size/4) % 16) + 1) 
-									block[m] <= 32'h00000000;
+									block[m] = 32'h00000000;
 							end
 							
 							// fill last two rows with length
-							block[14] <= size >> 29; // append length of message in bits (before pre-processing)
-							block[15] <= size * 8;
-							state <= INIT_W_1;
+							block[14] = size >> 29; // append length of message in bits (before pre-processing)
+							block[15] = size * 8;
+							state <= INIT_W;
 						end
 						
 						// Not enough room to put length at end of block
@@ -232,12 +222,12 @@ module sha256(input logic clk, reset_n, start,
 							// fill rest of block with zeros
 							for (m = 0; m < 16; m = m + 1) begin
 								if(m >= ((size/4) % 16) + 1) 
-									block[m] <= 32'h00000000;
+									block[m] = 32'h00000000;
 							end
 							
 							// trigger condition to fill next block with zeros and length
 							last_block_empty = 1;
-							state <= INIT_W_1;
+							state <= INIT_W;
 						end
 					end
 					else begin
@@ -253,7 +243,7 @@ module sha256(input logic clk, reset_n, start,
 		
 					// if last row in block has been read
 					if(row % 16 == 0) begin
-						state <= INIT_W_1;
+						state <= INIT_W;
 					end
 					
 					// more rows to read into block	
@@ -264,10 +254,24 @@ module sha256(input logic clk, reset_n, start,
 				
 				/* END READ 512 BIT BLOCK */
 				
-				INIT_W_1:begin
-				
-					t <= 0;
-					k <= 0;
+				INIT_W:begin
+					
+					for(int i = 0; i < 16; i++) begin
+						$display("Address: %d", i);
+						$display(" Value: %h \n", block[i]);
+					end
+					
+					for (int t = 0; t < 64; t = t + 1) begin
+						if (t < 16) begin
+							w[t] = block[t];
+					
+						end else begin
+							s0 = rightrotate(w[t-15], 7) ^ rightrotate(w[t-15], 18) ^ (w[t-15] >> 3);
+							s1 = rightrotate(w[t-2], 17) ^ rightrotate(w[t-2], 19) ^ (w[t-2] >> 10);
+							w[t] = w[t-16] + s0 + w[t-7] + s1;
+						end
+					end
+					
 					// INITIAL HASH AT ROUND K
 					a = h0;
 					b = h1;
@@ -277,83 +281,25 @@ module sha256(input logic clk, reset_n, start,
 					f = h5;
 					g = h6;
 					h = h7;
-					
-					for(int i = 0; i < 16; i++) begin
-						$display("Address: %d", i);
-						$display(" Value: %h \n", block[i]);
+
+					// HASH ROUNDS
+					for (int t = 0; t < 64; t = t + 1) begin
+						{a, b, c, d, e, f, g, h} = sha256_op(a, b, c, d, e, f, g, h, w[t], t);
 					end
 
-					state <= INIT_W_2;
-				end
+					// FINAL HASH
+					h0 = h0 + a;
+					h1 = h1 + b;
+					h2 = h2 + c;
+					h3 = h3 + d;
+					h4 = h4 + e;
+					h5 = h5 + f;
+					h6 = h6 + g;
+					h7 = h7 + h;
+					
+					state <= CHECK_IF_DONE;
 				
-				INIT_W_2: begin
-					$display("INIT_W_2, %d is t", t);
-					if(t === 64) begin
-						state <= SHA256;
-					end
-					else begin
-						if(t < 16) begin
-							state <= INIT_W_3_1;
-						end
-						else begin
-							state <= INIT_W_3_2;
-						end
-					end
 				end
-				INIT_W_3_1: begin
-					$display("INIT_W_3_1");
-					w[t] <= block[t];
-					t <= t + 1;
-					state <= INIT_W_2;
-				end
-				INIT_W_3_2: begin
-					$display("INIT_W_3_2");
-					s0 <= rightrotate(w[t-15], 7) ^ rightrotate(w[t-15], 18) ^ (w[t-15] >> 3);
-					s1 <= rightrotate(w[t-2], 17) ^ rightrotate(w[t-2], 19) ^ (w[t-2] >> 10);
-					state <= INIT_W_3_3;
-				end
-				INIT_W_3_3: begin
-					$display("INIT_W_3_3");
-					w[t] <= w[t-16] + s0 + w[t-7] + s1;
-					t <= t + 1;
-					state <= INIT_W_2;
-				end
-			
-				SHA256: begin
-					$display("SHA256, value of k is %d", k);
-					if(k < 64) begin
-						{a, b, c, d, e, f, g, h} <= sha256_op(a, b, c, d, e, f, g, h, w[k], k);
-						k <= k + 1;
-					end
-					else begin
-						h0 <= h0 + a;
-						h1 <= h1 + b;
-						h2 <= h2 + c;
-						h3 <= h3 + d;
-						h4 <= h4 + e;
-						h5 <= h5 + f;
-						h6 <= h6 + g;
-						h7 <= h7 + h;
-						state <= CHECK_IF_DONE;
-					end
-				end
-//					// HASH ROUNDS
-//					for (t = 0; t < 64; t = t + 1) begin
-//						{a, b, c, d, e, f, g, h} = sha256_op(a, b, c, d, e, f, g, h, w[t], t);
-//					end
-//					
-//					h0 = h0 + a;
-//					h1 = h1 + b;
-//					h2 = h2 + c;
-//					h3 = h3 + d;
-//					h4 = h4 + e;
-//					h5 = h5 + f;
-//					h6 = h6 + g;
-//					h7 = h7 + h;
-//					
-//					state <= CHECK_IF_DONE;
-//				end
-				
 
 				CHECK_IF_DONE: begin
 					if(block_index == total_blocks) begin
